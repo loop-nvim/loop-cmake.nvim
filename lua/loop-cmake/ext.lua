@@ -113,18 +113,10 @@ local function _cmake_configure(ext_data)
         end
         return
     end
-    local page_group = ext_data.request_page_proup("CMake configure")
-    if not page_group then return end
-    if page_group.have_pages() and not page_group.is_expired() then
-        vim.notify("Another configure operation is already running")
-        return
-    end
     local function next_task()
         if #task_list == 0 then
-            page_group.expire()
             return
         end
-        ---@type  loop-cmake.Task
         local task = task_list[1]
         logs.log({ "running cmake configure command", vim.inspect({
             name = task.name,
@@ -133,23 +125,15 @@ local function _cmake_configure(ext_data)
             env = task.env,
         }) })
         table.remove(task_list, 1)
-        local page_data = page_group.add_page({
-            label = task.name,
-            type = "term",
-            activate = true,
-            term_args = {
-                name = task.name,
-                command = task.command,
-                cwd = task.cwd,
-                env = task.env,
-                on_exit_handler = function(code)
-                    next_task()
-                end
-            }
+        ext_data.run_process({
+            name = task.name,
+            command = task.command,
+            cwd = task.cwd,
+            env = task.env,
+            on_exit_handler = function(code)
+                next_task()
+            end
         })
-        if not page_data then
-            page_group.expire()
-        end
     end
     next_task()
 end

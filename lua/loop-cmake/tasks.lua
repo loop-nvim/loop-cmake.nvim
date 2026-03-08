@@ -4,6 +4,12 @@ local generator = require('loop-cmake.generator')
 local strtools = require('loop.tools.strtools')
 local filetools = require('loop.tools.file')
 
+---@class loopcmake.ConfigureTask
+---@field name string
+---@field command string|string[]
+---@field env table<string,string>|nil
+---@field cwd string|nil
+
 local function _realpath(p)
 	return vim.fn.fnamemodify(vim.fn.resolve(p), ':p')
 end
@@ -60,12 +66,12 @@ end
 
 ---@param config CMakeConfig
 ---@param ingore_configured boolean
----@return loop-cmake.Task[]|nil,string[]|nil
+---@return loopcmake.ConfigureTask[]|nil,string[]|nil
 local function _get_configure_tasks(config, ingore_configured)
 	_init_cmake_api(config)
 	local profiles = config.profiles or {}
 	if #profiles == 0 then
-		return nil, {"No configured CMake profiles"}
+		return nil, { "No configured CMake profiles" }
 	end
 	local tasks = {}
 	for _, prof in ipairs(profiles) do
@@ -80,10 +86,9 @@ local function _get_configure_tasks(config, ingore_configured)
 				local cmd = { config.cmake_path }
 				vim.list_extend(cmd, strtools.cmd_to_string_array(prof.configure_args))
 				vim.list_extend(cmd, { "-B", build_dir, "-S", src_root, "-DCMAKE_BUILD_TYPE=" .. build_type })
-				---@type loop.taskTemplate[]
+				---@type loopcmake.ConfigureTask[]
 				local task = {
-					name = profile_name,
-					type = "build",
+					name = ("CMake Configure (%s)"):format(profile_name),
 					command = cmd,
 					cwd = src_root
 				}
@@ -132,7 +137,7 @@ function M.get_tasks(config)
 end
 
 ---@param config CMakeConfig
----@return loop-cmake.Task[]|nil,string|nil
+---@return loopcmake.ConfigureTask[]|nil,string|nil
 function M.get_configure_tasks(config)
 	local tasks, errors = _get_configure_tasks(config, false)
 	if not tasks then
