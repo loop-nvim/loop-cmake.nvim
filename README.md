@@ -11,7 +11,7 @@
 
 # loop-cmake.nvim
 
-CMake extension for [loop.nvim](https://github.com/mbfoss/loop.nvim). Integrates CMake configuration, building, testing, and execution into the Loop task system. Uses the CMake File-Based API to discover targets and tests.
+CMake extension for [loop.nvim](https://github.com/loop-nvim/loop.nvim). Integrates CMake configuration, building, testing, and execution into the Loop task system. Uses the CMake File-Based API to discover targets and tests.
 
 ## Requirements
 
@@ -33,8 +33,8 @@ CMake extension for [loop.nvim](https://github.com/mbfoss/loop.nvim). Integrates
 
 ```lua
 {
-    "mbfoss/loop-cmake.nvim",
-    dependencies = { "mbfoss/loop.nvim", "mbfoss/loop-build.nvim" },
+    "loop-nvim/loop-cmake.nvim",
+    dependencies = { "loop-nvim/loop.nvim", "loop-nvim/loop-build.nvim" },
 }
 ```
 
