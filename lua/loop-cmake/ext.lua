@@ -52,7 +52,7 @@ local function _get_subcommands(args)
     return {}
 end
 
----@param ext_data loop.ExtensionData
+---@param ext_data loop.ExtensionAPI
 local function _setup_profiles(ext_data)
     local schema = require('loop-cmake.configschema')
 
@@ -77,7 +77,7 @@ local function _setup_profiles(ext_data)
     editor:save()
 end
 
----@param ext_data loop.ExtensionData
+---@param ext_data loop.ExtensionAPI
 local function _load_ext_config(ext_data)
     local filepath = ext_data.get_config_file_path("profiles")
     local schema = require('loop-cmake.configschema')
@@ -100,7 +100,7 @@ local function _load_ext_config(ext_data)
     return config
 end
 
----@param ext_data loop.ExtensionData
+---@param ext_data loop.ExtensionAPI
 local function _cmake_configure(ext_data)
     local config = _load_ext_config(ext_data)
     if not config then return end
@@ -140,7 +140,7 @@ end
 
 
 ---@param args string[]
----@param ext_data loop.ExtensionData
+---@param ext_data loop.ExtensionAPI
 local function _do_command(args, ext_data)
     if #args == 0 then return end
     if args[1] == "setup" then
@@ -153,7 +153,7 @@ local function _do_command(args, ext_data)
     end
 end
 
----@param ext_data loop.ExtensionData
+---@param ext_data loop.ExtensionAPI
 local function _make_cmd_provider(ext_data)
     ---@type loop.UserCommandProvider
     return {
@@ -166,7 +166,7 @@ local function _make_cmd_provider(ext_data)
     }
 end
 
----@param ext_data loop.ExtensionData
+---@param ext_data loop.ExtensionAPI
 local function _make_template_provider(ext_data)
     ---@type loop.TaskTemplateProvider
     return {
