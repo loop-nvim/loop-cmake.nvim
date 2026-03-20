@@ -1,5 +1,5 @@
 local filetools = require('loop.tools.file')
-local logs = require('loop.logs')
+local log = require('loop.log')
 local jsoncodec = require('loop.json.codec')
 local jsonvalidator = require('loop.json.validator')
 local JsonEditor = require('loop.json.JsonEditor')
@@ -109,7 +109,7 @@ local function _cmake_configure(ext_data)
     if not task_list then
         vim.notify("Failed to build cmake configure tasks")
         if error_msg then
-            logs.log({ "failed to build cmake configure tasks", error_msg }, vim.log.levels.ERROR)
+            log.log({ "failed to build cmake configure tasks", error_msg }, vim.log.levels.ERROR)
         end
         return
     end
@@ -118,7 +118,7 @@ local function _cmake_configure(ext_data)
             return
         end
         local task = task_list[1]
-        logs.log({ "running cmake configure command", vim.inspect({
+        log.log({ "running cmake configure command", vim.inspect({
             name = task.name,
             command = task.command,
             cwd = task.cwd,
